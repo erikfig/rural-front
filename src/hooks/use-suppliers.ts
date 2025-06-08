@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000'; // Substitua pela URL base da API Swagger
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'; // Substitua pela URL base da API Swagger
 
 export interface Supplier {
   id: string;
