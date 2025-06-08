@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { supplierSchema } from './validation';
-import type { z } from 'zod';
+import { supplierSchema, type SupplierFormData } from './validation';
 import type { Supplier } from '@/hooks/use-suppliers';
 import Button from '@/components/ui/button/button';
 import { InputController } from '@/components/ui/form/input-controller';
@@ -15,14 +14,9 @@ interface SupplierFormProps {
   onSave: (data: Omit<Supplier, 'id'>) => void;
 }
 
-type SupplierFormData = Omit<z.infer<typeof supplierSchema>, 'crops' | 'harvests'> & {
-  crops: string | string[];
-  harvests: string | string[];
-};
-
 const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
   const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm<SupplierFormData>({
-    defaultValues: supplier,
+    defaultValues: supplier as SupplierFormData,
     resolver: zodResolver(supplierSchema),
   });
 
@@ -31,18 +25,16 @@ const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
 
   // Atualiza o valor de total_farm_area dinamicamente
   useEffect(() => {
-    setValue('total_farm_area', (+arableArea) + (+vegetationArea));
+    setValue('total_farm_area', (+arableArea || 0) + (+vegetationArea || 0));
   }, [arableArea, vegetationArea, setValue]);
 
   const onSubmit = async (data: SupplierFormData) => {
     const updatedData = {
       ...data,
-      total_farm_area: data.arable_area + data.vegetation_area,
-      crops: typeof data.crops === 'string' ? data.crops.split(',').map((item: string) => item.trim()) : data.crops,
-      harvests: typeof data.harvests === 'string' ? data.harvests.split(',').map((item: string) => item.trim()) : data.harvests,
+      total_farm_area: (data.arable_area || 0) + (data.vegetation_area || 0),
     };
     try {
-      await onSave(updatedData);
+      await onSave(updatedData as Omit<Supplier, 'id'>);
     } catch (error) {
       console.error('Erro ao salvar fornecedor:', error);
     }

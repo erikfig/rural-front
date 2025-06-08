@@ -21,15 +21,13 @@ export const supplierSchema = z
       .number()
       .refine((val) => !isNaN(val) && val > 0, 'Área de vegetação deve ser um número positivo'),
     harvests: z
-      .union([
-        z.string().transform((val) => val.split(',').map((item) => item.trim())),
-        z.array(z.string())
-      ])
+      .string()
+      .array()
       .refine((arr) => arr.length > 0, 'Deve haver pelo menos uma safra'),
     crops: z
-      .union([
-        z.string().transform((val) => val.split(',').map((item) => item.trim())),
-        z.array(z.string())
-      ])
+      .string()
+      .array()
       .refine((arr) => arr.length > 0, 'Deve haver pelo menos uma cultura plantada'),
   })
+
+export type SupplierFormData = z.infer<typeof supplierSchema>;

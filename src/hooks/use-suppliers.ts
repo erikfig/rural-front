@@ -13,8 +13,8 @@ export interface Supplier {
   total_farm_area: number;
   arable_area: number;
   vegetation_area: number;
-  harvests: string | string[];
-  crops: string | string[];
+  harvests: string[];
+  crops: string[];
 }
 
 // Obter fornecedores

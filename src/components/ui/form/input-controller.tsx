@@ -7,7 +7,8 @@ import SelectInput from './selectinput';
 
 interface InputControllerProps<T extends FieldValues> {
   name: Path<T>;
-  control: Control<T>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<T, any, T>;
   defaultValue?: PathValue<T, Path<T>>;
   type: HTMLInputElement['type'];
   errors: FieldErrors<T>;
