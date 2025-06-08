@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import type { Control, FieldErrors, FieldValues, Path, PathValue } from 'react-hook-form';
 import TextInput from './textinput';
 import TextArea from './textarea';
+import { ErrorComponent } from './styles';
+import SelectInput from './selectinput';
 
 interface InputControllerProps<T extends FieldValues> {
   name: Path<T>;
@@ -12,11 +13,13 @@ interface InputControllerProps<T extends FieldValues> {
   errors: FieldErrors<T>;
   placeholder?: string;
   label: string;
+  disabled?: boolean;
+  options?: { value: string; label: string }[];
 }
 
 type RenderProps = {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => void;
   onBlur: () => void;
 };
 
@@ -28,11 +31,9 @@ export const InputController = <T extends FieldValues>({
   type = 'text',
   placeholder,
   label,
+  disabled,
+  options = [],
 }: InputControllerProps<T>) => {
-  useEffect(() => {
-    console.log(errors);
-  }
-, [errors]);
   const render = (field: RenderProps) => {
     if (type === 'textarea') return (
       <TextArea
@@ -40,6 +41,14 @@ export const InputController = <T extends FieldValues>({
         label={label}
         {...field}
         placeholder={placeholder}
+      />
+    )
+    if (type === 'select') return (
+      <SelectInput
+        name={name}
+        label={label}
+        {...field}
+        options={options}
       />
     )
 
@@ -50,6 +59,7 @@ export const InputController = <T extends FieldValues>({
         { ...field }
         placeholder={ placeholder }
         type={ type }
+        disabled={disabled}
       />
     )
   }
@@ -62,7 +72,7 @@ export const InputController = <T extends FieldValues>({
         defaultValue={defaultValue}
         render={({ field }) => render(field)}
       />
-      {errors[name] && <p className="mt-2 text-red-500">{errors[name].message as string}</p>}
+      {errors[name] && <ErrorComponent>{errors[name].message as string}</ErrorComponent>}
     </div>
   );
 };

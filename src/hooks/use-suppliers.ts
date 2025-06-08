@@ -13,8 +13,8 @@ export interface Supplier {
   total_farm_area: number;
   arable_area: number;
   vegetation_area: number;
-  harvests: string[];
-  crops: string[];
+  harvests: string | string[];
+  crops: string | string[];
 }
 
 // Obter fornecedores
@@ -47,7 +47,6 @@ export const useUpdateSupplier = () => {
   const queryClient = useQueryClient();
   return useMutation<Supplier, Error, { id: string; updatedSupplier: Partial<Supplier> }>({
     mutationFn: async ({ id, updatedSupplier }) => {
-      console.log('Updating supplier:', id, updatedSupplier);
       const { data } = await axios.put(`${API_BASE_URL}/rural-producers/${id}`, updatedSupplier);
       return data;
     },

@@ -1,9 +1,10 @@
 import type { Supplier } from '@/hooks/use-suppliers';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Pagination from '@/components/ui/pagination/pagination';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/button';
 import { usePagination } from '@/components/ui/pagination/usePagination';
 import { Card, CardContent } from '@/components/ui/card';
+import { ComponentSupplierActions } from './styles';
 
 interface SupplierListProps {
   suppliers: Supplier[];
@@ -17,11 +18,11 @@ const SupplierList = ({ suppliers, onEdit, onDelete }: SupplierListProps) => {
   return (
     <>
       {paginatedItems.map((supplier) => (
-        <Card className='transition-shadow duration-200 hover:shadow-lg hover:bg-gray-200' key={supplier.id}>
+        <Card key={supplier.id}>
           <CardContent>
-            <div className="flex flex-row justify-between gap-2">
-              <p>{supplier.farm_name}</p>
-              <div className="flex flex-row justify-between gap-2">
+            <ComponentSupplierActions>
+              {supplier.farm_name}
+              <ComponentSupplierActions>
                 <Button
                   color="yellow"
                   onClick={() => onEdit(supplier)}
@@ -40,8 +41,8 @@ const SupplierList = ({ suppliers, onEdit, onDelete }: SupplierListProps) => {
                 >
                   <FaTrash />
                 </Button>
-              </div>
-            </div>
+              </ComponentSupplierActions>
+            </ComponentSupplierActions>
           </CardContent>
         </Card>
       ))}

@@ -1,5 +1,9 @@
-import { cn } from "@/lib/utils";
+import { CardComponent } from "./styles";
 
-export const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => (
-  <div className={cn("rounded-2xl shadow-sm", className)} {...props} />
+type CardProps = React.HTMLAttributes<HTMLDivElement> & {
+  variant?: "primary" | "secondary";
+}
+
+export const Card = ({ className, ...props }: CardProps) => (
+  <CardComponent className={className} {...props} />
 );

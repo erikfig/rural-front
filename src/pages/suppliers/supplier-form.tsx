@@ -3,8 +3,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { supplierSchema } from './validation';
 import type { z } from 'zod';
 import type { Supplier } from '@/hooks/use-suppliers';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/button';
 import { InputController } from '@/components/ui/form/input-controller';
+import { ComponentOverlay, ComponentForm, ComponentTitle, ComponentBtnGroup, ComponentRow } from './styles';
+import { useEffect } from 'react';
+import { states } from '@/lib/utils/states';
 
 interface SupplierFormProps {
   supplier: Supplier | Omit<Supplier, 'id'>;
@@ -12,27 +15,47 @@ interface SupplierFormProps {
   onSave: (data: Omit<Supplier, 'id'>) => void;
 }
 
-type SupplierFormData = z.infer<typeof supplierSchema>;
+type SupplierFormData = Omit<z.infer<typeof supplierSchema>, 'crops' | 'harvests'> & {
+  crops: string | string[];
+  harvests: string | string[];
+};
 
 const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<SupplierFormData>({
+  const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm<SupplierFormData>({
     defaultValues: supplier,
     resolver: zodResolver(supplierSchema),
   });
 
-  const onSubmit = (data: SupplierFormData) => {
-    onSave(data);
+  const arableArea = watch('arable_area');
+  const vegetationArea = watch('vegetation_area');
+
+  // Atualiza o valor de total_farm_area dinamicamente
+  useEffect(() => {
+    setValue('total_farm_area', (+arableArea) + (+vegetationArea));
+  }, [arableArea, vegetationArea, setValue]);
+
+  const onSubmit = async (data: SupplierFormData) => {
+    const updatedData = {
+      ...data,
+      total_farm_area: data.arable_area + data.vegetation_area,
+      crops: typeof data.crops === 'string' ? data.crops.split(',').map((item: string) => item.trim()) : data.crops,
+      harvests: typeof data.harvests === 'string' ? data.harvests.split(',').map((item: string) => item.trim()) : data.harvests,
+    };
+    try {
+      await onSave(updatedData);
+    } catch (error) {
+      console.error('Erro ao salvar fornecedor:', error);
+    }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <form
-        className="flex flex-col w-screen h-screen max-w-2xl gap-4 p-4 overflow-auto bg-white rounded shadow-md max-h-9/10"
+    <ComponentOverlay>
+      <ComponentForm
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h3 className="text-xl font-bold">{
-          'id' in supplier ? 'Editar Fornecedor' : 'Adicionar Fornecedor'
-        }</h3>
+        <ComponentTitle>{
+          ('id' in supplier && supplier.id) ? 'Editar Fornecedor' : 'Adicionar Fornecedor'
+        }</ComponentTitle>
 
         <InputController
           name="cpf_cnpj"
@@ -40,7 +63,7 @@ const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
           label="CPF ou CNPJ"
           placeholder="CPF/CNPJ"
           type="text"
-          errors={ errors }
+          errors={errors}
         />
 
         <InputController
@@ -61,50 +84,56 @@ const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
           errors={ errors }
         />
 
-        <InputController
-          name="city"
-          control={control}
-          label="Cidade"
-          placeholder="Cidade"
-          type="text"
-          errors={ errors }
-        />
+        <ComponentRow>
+          <InputController
+            name="city"
+            control={control}
+            label="Cidade"
+            placeholder="Cidade"
+            type="text"
+            errors={ errors }
+          />
 
-        <InputController
-          name="state"
-          control={control}
-          label="Estado"
-          placeholder="Estado"
-          type="text"
-          errors={ errors }
-        />
+          <InputController
+            name="state"
+            control={control}
+            label="Estado"
+            placeholder="Estado"
+            type="select"
+            options={states}
+            errors={ errors }
+          />
+        </ComponentRow>
 
-        <InputController
-          name="total_farm_area"
-          control={control}
-          label="Área total da fazenda (em hectares)"
-          placeholder="Área Total da Fazenda"
-          type="number"
-          errors={ errors }
-        />
+        <ComponentRow>
+          <InputController
+            name="total_farm_area"
+            control={control}
+            label="Área total da fazenda (em hectares)"
+            placeholder="Área Total da Fazenda"
+            type="number"
+            disabled
+            errors={ errors }
+          />
 
-        <InputController
-          name="arable_area"
-          control={control}
-          label="Área agricultável (em hectares)"
-          placeholder="Área Cultivável"
-          type="number"
-          errors={ errors }
-        />
+          <InputController
+            name="arable_area"
+            control={control}
+            label="Área agricultável (em hectares)"
+            placeholder="Área Cultivável"
+            type="number"
+            errors={ errors }
+          />
 
-        <InputController
-          name="vegetation_area"
-          control={control}
-          label="Área de vegetação (em hectares)"
-          placeholder="Área de Vegetação"
-          type="number"
-          errors={ errors }
-        />
+          <InputController
+            name="vegetation_area"
+            control={control}
+            label="Área de vegetação (em hectares)"
+            placeholder="Área de Vegetação"
+            type="number"
+            errors={ errors }
+          />
+        </ComponentRow>
 
         <InputController
           name="harvests"
@@ -124,7 +153,7 @@ const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
           errors={ errors }
         />
 
-        <div className="flex justify-end gap-2">
+        <ComponentBtnGroup>
           <Button
             color="gray"
             onClick={onClose}
@@ -132,16 +161,16 @@ const SupplierForm = ({ supplier, onClose, onSave }: SupplierFormProps) => {
           >
             Cancelar
           </Button>
-          <button
+          <Button
+            color="blue"
             type="submit"
-            className="flex items-center gap-1 px-2 py-1 text-white bg-blue-500 rounded cursor-pointer"
             title="Salvar"
           >
             Salvar
-          </button>
-        </div>
-      </form>
-    </div>
+          </Button>
+        </ComponentBtnGroup>
+      </ComponentForm>
+    </ComponentOverlay>
   );
 };
 

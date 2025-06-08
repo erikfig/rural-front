@@ -6,7 +6,7 @@ export const Route = createFileRoute('/settings')({
 
 function Component() {
   return (
-    <div className="p-2">
+    <div>
       <h3>Welcome Settings!</h3>
     </div>
   )

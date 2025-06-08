@@ -1,24 +1,24 @@
 import React from 'react';
 import { TextInputWrapper, LabelComponent, InputComponent } from './styles';
 
-interface TextInputProps {
+interface SelectInputProps {
   label: string;
   name: string;
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: { value: string; label: string }[];
   placeholder?: string;
-  type?: string;
   required?: boolean;
   disabled?: boolean;
 }
 
-const TextInput: React.FC<TextInputProps> = ({
+const SelectInput: React.FC<SelectInputProps> = ({
   label,
   name,
   value,
   onChange,
+  options,
   placeholder,
-  type = 'text',
   required = false,
   disabled,
 }) => {
@@ -26,17 +26,23 @@ const TextInput: React.FC<TextInputProps> = ({
     <TextInputWrapper>
       <LabelComponent htmlFor={name}>{label}</LabelComponent>
       <InputComponent
+        as="select"
         id={name}
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
-        type={type}
         required={required}
         disabled={disabled}
-      />
+      >
+        {placeholder && <option value="" disabled>{placeholder}</option>}
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </InputComponent>
     </TextInputWrapper>
   );
 };
 
-export default TextInput;
+export default SelectInput;

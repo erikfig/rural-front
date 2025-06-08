@@ -1,4 +1,5 @@
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/button';
+import { ComponentPaginationContainer, ComponentPaginationText } from './styles';
 
 interface PaginationProps {
   currentPage: number;
@@ -20,7 +21,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-4">
+    <ComponentPaginationContainer>
       <Button
         color="gray"
         onClick={handlePrevious}
@@ -29,7 +30,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       >
         Anterior
       </Button>
-      <span className="px-4 py-2">{currentPage} de {totalPages}</span>
+      <ComponentPaginationText>{currentPage} de {totalPages}</ComponentPaginationText>
       <Button
         color="gray"
         onClick={handleNext}
@@ -38,7 +39,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       >
         Próximo
       </Button>
-    </div>
+    </ComponentPaginationContainer>
   );
 };
 

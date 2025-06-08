@@ -1,4 +1,5 @@
 import React from 'react';
+import { TextAreaWrapper, TextAreaComponent, LabelComponent } from './styles';
 
 interface TextAreaProps {
   label: string;
@@ -18,18 +19,17 @@ const TextArea: React.FC<TextAreaProps> = ({
   required = false,
 }) => {
   return (
-    <div className="flex flex-col gap-1">
-      <label className="font-medium" htmlFor={name}>{label}</label>
-      <textarea
+    <TextAreaWrapper>
+      <LabelComponent htmlFor={name}>{label}</LabelComponent>
+      <TextAreaComponent
         id={name}
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="p-2 border rounded"
         required={required}
       />
-    </div>
+    </TextAreaWrapper>
   );
 };
 

@@ -2,7 +2,9 @@ import { useGetSuppliers, useCreateSupplier, useUpdateSupplier, useDeleteSupplie
 import { useState } from 'react';
 import SupplierForm from './suppliers/supplier-form';
 import SupplierList from './suppliers/supplier-list';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/button';
+import { ComponentSuppliersContainer, ComponentSuppliersHeader, ComponentSuppliersDescription } from './suppliers/styles';
+import SupplierChart from './suppliers/supplier-chart';
 
 export const Suppliers = () => {
   const { data: suppliers, isLoading, isError } = useGetSuppliers();
@@ -41,9 +43,9 @@ export const Suppliers = () => {
   if (isError) return <p>Erro ao carregar fornecedores.</p>;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex justify-between">
-        <h2 className="text-2xl font-bold">
+    <ComponentSuppliersContainer>
+      <ComponentSuppliersHeader>
+        <h2>
           Fornecedores
         </h2>
 
@@ -54,9 +56,11 @@ export const Suppliers = () => {
         >
           + Novo
         </Button>
-      </div>
+      </ComponentSuppliersHeader>
 
-      <p className="text-gray-600">Gerencie seus fornecedores aqui.</p>
+      <ComponentSuppliersDescription>Gerencie seus fornecedores aqui.</ComponentSuppliersDescription>
+
+      <SupplierChart suppliers={suppliers || []} />
 
       <SupplierList
         suppliers={suppliers || []}
@@ -82,6 +86,6 @@ export const Suppliers = () => {
           onSave={handleSaveSupplier}
         />
       )}
-    </div>
+    </ComponentSuppliersContainer>
   );
 };
