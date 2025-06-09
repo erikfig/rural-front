@@ -21,12 +21,12 @@ export const supplierSchema = z
       .number()
       .refine((val) => !isNaN(val) && val > 0, 'Área de vegetação deve ser um número positivo'),
     harvests: z
-      .string()
-      .array()
+      .union([z.string(), z.array(z.string())])
+      .transform((val) => (typeof val === 'string' ? val.split(',').map(harvest => harvest.trim()) : val))
       .refine((arr) => arr.length > 0, 'Deve haver pelo menos uma safra'),
     crops: z
-      .string()
-      .array()
+      .union([z.string(), z.array(z.string())])
+      .transform((val) => (typeof val === 'string' ? val.split(',').map(crop => crop.trim()) : val))
       .refine((arr) => arr.length > 0, 'Deve haver pelo menos uma cultura plantada'),
   })
 

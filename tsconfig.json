@@ -5,9 +5,11 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "outDir": "./dist"
   },
   "files": ["src/styled.d.ts"],
+  "include": ["src/vite-env.d.ts"],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

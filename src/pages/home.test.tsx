@@ -12,6 +12,8 @@ jest.mock('@/components/charts', () => ({
   AreaChart: () => <div>AreaChart Mock</div>,
 }));
 
+jest.mock("@/config", () => ({ API_BASE_URL: "http://localhost:3000" }));
+
 jest.mock('@/hooks/use-suppliers', () => {
   let data: Array<{ state: string; crops: string[]; arable_area: number; vegetation_area: number }> | undefined = undefined;
   return {
