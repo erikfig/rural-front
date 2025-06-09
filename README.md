@@ -1,54 +1,47 @@
-# React + TypeScript + Vite
+# Projeto Rural Front
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este é o front-end do projeto Rural, desenvolvido com React e Vite. Ele fornece uma interface moderna e responsiva para gerenciar dados relacionados a fornecedores e outras funcionalidades.
 
-Currently, two official plugins are available:
+## Estrutura do Projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Abaixo está uma visão geral da estrutura de pastas do projeto:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+- src/
+  - components/
+  - hooks/
+  - layouts/
+  - lib/
+  - pages/
+  - routes/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Como Rodar o Projeto
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Certifique-se de ter o Node.js e o Yarn instalados.
+2. Instale as dependências:
+   ```bash
+   yarn install
+   ```
+3. Rode o projeto em ambiente de desenvolvimento:
+   ```bash
+   yarn dev
+   ```
+4. Para gerar o build de produção:
+   ```bash
+   yarn build
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Imagens do Projeto
+
+Abaixo estão algumas imagens ilustrativas do projeto:
+
+![Imagem 1](doc-assets/1.png)
+![Imagem 2](doc-assets/2.png)
+![Imagem 3](doc-assets/3.png)
+
+## Comandos Úteis
+
+- `yarn dev`: Inicia o servidor de desenvolvimento.
+- `yarn build`: Gera os arquivos para produção.
+- `yarn test`: Executa os testes automatizados.
