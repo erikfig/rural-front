@@ -16,7 +16,6 @@ export interface Supplier {
   crops: string[];
 }
 
-// Obter fornecedores
 export const useGetSuppliers = () => {
   return useQuery<Supplier[], Error>({
     queryKey: ['suppliers'],
@@ -27,7 +26,6 @@ export const useGetSuppliers = () => {
   });
 };
 
-// Criar fornecedor
 export const useCreateSupplier = () => {
   const queryClient = useQueryClient();
   return useMutation<Supplier, Error, Omit<Supplier, 'id'>>({
@@ -41,7 +39,6 @@ export const useCreateSupplier = () => {
   });
 };
 
-// Atualizar fornecedor
 export const useUpdateSupplier = () => {
   const queryClient = useQueryClient();
   return useMutation<Supplier, Error, { id: string; updatedSupplier: Partial<Supplier> }>({
@@ -55,7 +52,6 @@ export const useUpdateSupplier = () => {
   });
 };
 
-// Excluir fornecedor
 export const useDeleteSupplier = () => {
   const queryClient = useQueryClient();
   return useMutation<void, Error, string>({
